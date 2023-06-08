@@ -5,18 +5,11 @@ import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import com.example.plugins.*
+import com.example.routing.notesRouter
 import org.ktorm.database.Database
 import org.ktorm.dsl.*
 
 fun main() {
-
-    val database = Database.connect(
-        url = "jdbc:mysql://localhost:3306/notes",
-        driver = "com.mysql.cj.jdbc.Driver",
-        user = "root",
-        password = "administrador"
-    )
-
 
     //Insertamos valores a la db
     /*
@@ -47,9 +40,10 @@ fun main() {
     }*/
 
     //Delete values
+    /*
     database.delete(NotesEntity){
         it.id eq 2
-    }
+    }*/
 
 
     //Esta parte va al final de la funcion main
@@ -61,4 +55,5 @@ fun Application.module() {
     configureSerialization()
     configureSecurity()
     configureRouting()
+    notesRouter()
 }
