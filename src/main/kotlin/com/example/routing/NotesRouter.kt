@@ -83,6 +83,38 @@ fun Application.notesRouter() {
             }
         }
 
+        //PUT update a note by id
+        put("/notes/{id}") {
+            //con las siguientes dos lineas, capturamos el id y la nota a upgradear
+            val id = call.parameters["id"]?.toInt() ?: -1
+            val updateNote = call.receive<NoteRequest>()
+
+            //con esta parte, seteamos la nueva nota y le respondemos al cliente OK o BadRequest
+            val rowsEffected = db.update(NotesEntity) {
+                set(it.note, updateNote.note)
+                where {
+                    it.id eq id
+                }
+            }
+            if (rowsEffected == 1) {
+                call.respond(
+                    HttpStatusCode.OK,
+                    NoteResponse(
+                        success = true,
+                        data = "Note successfully updated"
+                    )
+                )
+            } else {
+                call.respond(
+                    HttpStatusCode.BadRequest,
+                    NoteResponse(
+                        success = false,
+                        data = "Note failed to update"
+                    )
+                )
+            }
+        }
+
 
     }
 }
