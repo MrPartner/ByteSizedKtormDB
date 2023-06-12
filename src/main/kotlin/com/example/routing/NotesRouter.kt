@@ -125,5 +125,35 @@ fun Application.notesRouter() {
             }
         }
 
+        //DELETE note by id
+        delete("/notes/{id}"){
+            //con esta linea recuperamos el id de la nota a deletear
+            val id = call.parameters["id"]?.toInt() ?: -1
+
+            //con este codigo verificamos el request si es valido o no, y de ser valido deleteamos la nota por id
+            //y respondemos al cliente OK o BadRequest
+            val rowsEffected = db.delete(NotesEntity){
+                it.id eq id
+            }
+            if (rowsEffected == 1) {
+                call.respond(
+                    HttpStatusCode.OK,
+                    NoteResponse(
+                        success = true,
+                        data = "Note successfully deleted"
+                    )
+                )
+            } else {
+                call.respond(
+                    HttpStatusCode.BadRequest,
+                    NoteResponse(
+                        success = false,
+                        data = "Note failed to delete"
+                    )
+                )
+            }
+        }
+
+
     }
 }
