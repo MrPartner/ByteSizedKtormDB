@@ -148,7 +148,7 @@ fun Application.notesRouter() {
                     HttpStatusCode.BadRequest,
                     NoteResponse(
                         success = false,
-                        data = "Note failed to delete"
+                        data = "Could not found note with id = $id"
                     )
                 )
             }
